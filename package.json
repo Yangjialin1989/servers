@@ -12,8 +12,12 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "koa": "^2.14.1",
     "mongoose": "^6.5.1",
     "morgan": "~1.9.1",
-    "svg-captcha": "^1.4.0"
+    "redis": "^4.0.6",
+    "svg-captcha": "^1.4.0",
+    "util": "^0.12.5",
+    "uuid": "^9.0.0"
   }
 }
