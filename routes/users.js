@@ -4,17 +4,25 @@ var Users = require('../models/users');
 /* GET users listing. */
 const redis = require('../utils/redis');
 
-router.get('/', function(req, res, next) {
-
-  res.send({
-    result:{
-        name:'hhh',
-            password:'ssss'
-    },
-    code:0,
-    msg:'成功'
-  }
-  );
+router.post('/validUsername', function(req, res, next) {
+    let param = {
+        name:req.body.username
+    }
+    console.log(param)
+    Users.findOne(param,function(err,doc){
+        if(!doc){
+            res.json({
+                code:300,
+                msg:'该用户名可以注册!'
+            })
+        }
+        if(doc){
+            res.json({
+                code:102,
+                msg:'用户名已存在,请更换!'
+            })
+        }
+    })
 });
 //
 // router.post('/login',async (req,res,next)=> {
@@ -71,7 +79,8 @@ router.post('/login',async (req,res,next)=> {
             res.json({
                 code:101,
                 msg:'图片验证码输入错误或已经过期,请重新刷新输入！',
-                token:null
+                token:null,
+                remember:false
             })
 
         }
@@ -79,7 +88,8 @@ router.post('/login',async (req,res,next)=> {
         res.json({
             code:101,
             msg:'图片验证码输入错误或已经过期,请重新刷新输入！',
-            token:null
+            token:null,
+            remember:false
         })
     }
 
@@ -102,13 +112,15 @@ router.post('/login',async (req,res,next)=> {
             return res.json({
                 code: 100,
                 msg:'用户不存在，请注册',
-                token:null
+                token:null,
+                remember:false
             })
         }
         return res.json({
             code:200,
             msg:'登录成功',
-            token:'22edsfsdfsdfd'
+            token:'22edsfsdfsdfd',
+            remember:true
         })
     }
 
@@ -121,7 +133,20 @@ router.post('/login',async (req,res,next)=> {
     //
 
 });
+//注册
+router.post('/register',function(req,res,next){
+    console.log(req.body)
+    const users = req.body
+    const user = new Users(users)
+     user.save().then((result)=>{
+        console.log("存储数据成功!")
+        res.json({
+            code: 200,
+            msg:'注册成功！'
+        })
+    })
 
+})
 
 
 module.exports = router;
