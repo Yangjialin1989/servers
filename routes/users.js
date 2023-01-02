@@ -35,7 +35,7 @@ router.post('/validUsername', function(req, res, next) {
 //         name: req.body.name,
 //         password: req.body.password
 //     }
-//     var users = await Users.findOne(param);
+//     var users = await Admin.findOne(param);
 //     if(!users){
 //         return res.json({
 //             code: '1',
@@ -188,9 +188,9 @@ router.post('/sendemail',function(req,res,next){
 router.post('/getadmins',function(req,res,next){
     let param = {}
     let param1 = {limit:req.body.limit*16}
-    console.log(param1)
-    Users.find({},{name:1,email:1,telephone:1},param1,function(err,result){
-        console.log(result)
+    //console.log(param1)
+    Users.find({},{id:1,name:1,email:1,telephone:1},param1,function(err,result){
+        //console.log(result)
         if(err){
             res.json({
                 code:104,
@@ -206,7 +206,45 @@ router.post('/getadmins',function(req,res,next){
 
     })
 })
+//删除数据
+router.post('/deleteadmins',function(req,res,next){
+    let param = req.body;
+    console.log(param)
+    Users.remove(param,function(err,doc){
+        if(err){
+            return res.json({
+                code:-1,
+                msg:'数据删除失败！'+err
+            })
+        }
+        if(doc){
+            res.json({
+                code:0,
+                msg:'数据删除成功！'
+            })
+        }
+    })
 
 
+})
+//添加管理员
+router.post('/addadmins',function(req,res,next){
+    console.log(req.body)
+    const users = req.body
+    const user = new Users(users)
+    user.save().then((result)=>{
+        console.log("存储数据成功!")
+        res.json({
+            code: 200,
+            msg:'添加成功！',
+            email:req.body.email,
+            name:req.body.name
+        })
+        //添加id
+
+        Users.findOneAndUpdate(user)
+    })
+
+})
 
 module.exports = router;

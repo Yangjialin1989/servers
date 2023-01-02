@@ -100,7 +100,7 @@ router.post('/regist',async (req,res,next)=>{
 //         name: req.body.name,
 //         password: req.body.password
 //     }
-//     var users = await Users.findOne(param);
+//     var users = await Admin.findOne(param);
 //     if(!users){
 //         return res.json({
 //             code: '1',
